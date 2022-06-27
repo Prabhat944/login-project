@@ -1,8 +1,9 @@
-import React, { useState,useEffect, useReducer } from 'react';
+import React, { useState,useEffect, useReducer,useContext } from 'react';
 
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
+import AuthContext from '../../store/auth-context';
 
 const emailReducer=(state,action)=>{
   if(action.type === 'User_Input'){
@@ -34,7 +35,7 @@ const collegeReducer = (state,action) => {
   return{value:'',isValid:false};
 };
 
-const Login = (props) => {
+const Login = () => {
   // const [enteredEmail, setEnteredEmail] = useState('');
   // const [emailIsValid, setEmailIsValid] = useState();
   // const [enteredPassword, setEnteredPassword] = useState('');
@@ -50,6 +51,8 @@ const [collegeState,dispatchCollege] = useReducer(collegeReducer,{value:'',isVal
 const {isValid:emailIsValid}=emailState;
 const {isValid:passwordIsValid}=passwordState;
 const {isValid:collegeIsValid}=collegeState;
+
+const authCtx =  useContext(AuthContext);
 
   useEffect(()=>{
      const identifier = setTimeout(()=>{
@@ -100,9 +103,10 @@ const {isValid:collegeIsValid}=collegeState;
 
   const submitHandler = (event) => {
     event.preventDefault();
-    localStorage.setItem('isLoggedIn','1');
-    props.onLogin(emailState.value, passwordState.value,collegeState.value);
+    authCtx.onLogin(emailState.value, passwordState.value,collegeState.value);
   };
+
+
 
   return (
     <Card className={classes.login}>
